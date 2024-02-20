@@ -135,6 +135,7 @@ The following software is currently required for `facedetect`:
 - Python 3 or Python 2.7
 - Python OpenCV >= 2.4 (``python3-opencv`` or ``python-opencv``)
 - OpenCV data files (``opencv-data`` if available, or ``libopencv-dev``)
+- pillow pillow-heif pillow-avif-plugin
 
 On Debian/Ubuntu, you can install all the required dependencies with::
 
