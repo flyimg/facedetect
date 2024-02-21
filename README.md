@@ -1,4 +1,4 @@
-facedetect: a simple face detector for batch processing
+# facedetect: a simple face detector
 =======================================================
 
 `facedetect` is a simple face detector for batch processing. It answers the
@@ -13,26 +13,30 @@ detection algorithm over time.
 cutting region, so that faces are always centered.
 
 
-Basic Usage
------------
+## Basic Usage
 
 By default `facedetect` outputs the rectangles of all the detected faces::
-
+```
   ./facedetect path/to/image.jpg
   289 139 56 56
   295 283 55 55
+```
 
 The output values are the X Y coordinates (from the top-left corner),
 followed by width and height. For debugging, you can examine the face positions
 directly overlaid on the source image using the ``-o`` flag::
 
+```
   ./facedetect -o test.jpg path/to/image.jpg
+```
 
 To simply check if an image contains a face, use the ``-q`` switch and check
 the exit status::
 
+```
   ./facedetect -q path/to/image.jpg
   echo $?
+```
 
 An exit status of 0 indicates the presence of at least one face. An exit status
 of 2 means that no face could be detected (1 is reserved for failures).
@@ -40,33 +44,37 @@ of 2 means that no face could be detected (1 is reserved for failures).
 The ``--center`` flag also exists for scripting convenience, and simply outputs
 the X Y coordinates of face centers::
 
+```
   ./facedetect --center path/to/image.jpg
   317 167
   322 310
+```
 
 The ``--biggest`` flag only outputs the biggest face in the image, while
 ``--best`` will attempt to select the face in focus and/or in the center of the
 frame.
 
+```
 .. figure:: doc/biggest-best.jpg
   :align: center
 
   Comparison between ``--best`` (top) and ``--biggest`` (bottom). The
   chosen face is highlighted in yellow.
+```
 
 Unless DOF or motion blur is used effectively by the photographer to separate
 the subject, ``--biggest`` would in most cases select the same face as
 ``--best``, while being significantly faster to compute.
 
 
-Examples
---------
+## Examples
 
-Sorting images with and without faces
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### Sorting images with and without faces
+
 The following example sorts pictures into two different "landscape"
 and "people" directories using the exit code::
 
+```
   for file in path/to/pictures/*.jpg; do
     name=$(basename "$file")
     if facedetect -q "$file"; then
@@ -75,12 +83,14 @@ and "people" directories using the exit code::
       mv "$file" "path/to/landscape/$name"
     fi
   done
+```
 
-Blurring faces within an image
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### Blurring faces within an image
+
 The following example uses the coordinates from `facedetect` to pixelate the
 faces in all the source images using `mogrify` (from ImageMagick_)::
 
+```
   for file in path/to/pictures/*.jpg; do
     name=$(basename "$file")
     out="path/to/blurred/$name"
@@ -90,15 +100,17 @@ faces in all the source images using `mogrify` (from ImageMagick_)::
 	-scale '10%' -scale '1000%' "$out"
     done
   done
+```
 
 Here ``mogrify`` is called for each output line of `facedetect` (which is
 sub-optimal), modifying the file in-place.
 
-Extracting all faces to separate images
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### Extracting all faces to separate images
+
 The following example uses ``convert`` from ImageMagick_ to extract each
 face in each source image ``img.jpg`` to a separated image ``img_N.jpg``::
 
+```
   for file in path/to/pictures/*.jpg; do
     name=$(basename "$file")
     i=0
@@ -107,10 +119,9 @@ face in each source image ``img.jpg`` to a separated image ``img_N.jpg``::
       i=$(($i+1))
     done
   done
+ ```
 
-
-Searching for a face
---------------------
+### Searching for a face
 
 `facedetect` has some naïve support to search for a specific face as supplied
 with the ``-s`` file argument. The file provided must be an image containing
@@ -127,8 +138,7 @@ similarity. The current matching algorithm is based on simple MSSIM which is
 far from perfect (see `Development status and ideas`_).
 
 
-Dependencies
-------------
+### Dependencies
 
 The following software is currently required for `facedetect`:
 
@@ -139,15 +149,15 @@ The following software is currently required for `facedetect`:
 
 On Debian/Ubuntu, you can install all the required dependencies with::
 
-  sudo apt-get install python3-opencv opencv-data
+  `sudo apt-get install python3-opencv opencv-data`
 
 and then install `facedetect` with::
 
-  sudo cp facedetect /usr/local/bin
+  `sudo cp facedetect /usr/local/bin`
 
 
-Development status and ideas
-----------------------------
+### Development status and ideas
+
 
 Currently `facedetect` is not much beyond a simple wrapper over the Haar
 Cascade classifier of OpenCV and the ``frontalface_alt2`` profile, which
@@ -183,8 +193,7 @@ GUI on top of facedetect to train SVM models (which can then be fed back to
 deviates from the original intention of unsupervised search.
 
 
-Authors and Copyright
----------------------
+# Authors and Copyright
 
 `facedetect` can be found at https://www.thregr.org/~wavexx/software/facedetect/
 
