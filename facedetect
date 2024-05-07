@@ -12,7 +12,11 @@ import sys
 import os
 
 from PIL import Image
-import pillow_avif
+
+try:
+    import pillow_avif
+except ImportError:
+    pass
 
 # CV compatibility stubs
 if 'IMREAD_GRAYSCALE' not in dir(cv2):
